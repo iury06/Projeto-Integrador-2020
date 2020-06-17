@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "projetoIntegrador-Pi"
+    }
+  },
+  "defaultProject": "projetoIntegrador-Pi",
+  "cli": {
+    "analytics": "54780741-2e68-4d83-96db-fde2ccdcb8cc"
+  }
 }
