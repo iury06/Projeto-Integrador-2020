@@ -1,0 +1,210 @@
+<app-home></app-home>
+<div class="ui-g">
+    <p-toast></p-toast>
+    <p-confirmDialog header="Confirmação" acceptLabel="Sim" rejectLabel="Não" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+    <p-panel header="Ordem de Servico" [style]="{width: '95%', margin: '0 auto'}">
+        <div style="margin-bottom: 20px">
+            <p-menubar [model]="items"></p-menubar>
+        </div>
+
+        <p-table [value]="lista" [columns]="cols" [responsive]="true" selectionMode="single" #dt [globalFilterFields]="['os_id','os_data_emisao',
+        'os_data_fechamento', 'os_descricao', 'os_status', 'pessoaCli.nome', 'tipoServico.descricao','laboratorioSala.nome']"
+        [(selection)]="ordemSelecionada"
+        dataKey="id" [paginator]="true" [rows]="15">
+
+
+        <ng-template pTemplate="caption">
+            <div style="text-align: right">
+                <input type="text" pInputText size="50" placeholder="Pesquisar..."
+                    (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                    {{col.header}}
+
+            
+            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            
+        </th>
+
+            <th>Status</th>
+            <th>Data do pedido</th>
+            <th>Data fechamento</th>
+            <th>Descrição</th>
+            <th>Cliente</th>
+            <th>Funcionario</th>
+            <th>Tipo servico</th>
+            <th>Local</th>
+            <th>Laboratorio</th>
+            
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body" let-obj let-columns="columns">
+                
+                <tr [pSelectableRow]="obj">
+
+                    <td *ngFor="let col of columns">
+                        {{obj[col.field]}}
+                    
+                    </td>
+
+                    <td>{{obj.os_status}}</td> 
+                    <td>{{obj.os_data_emisao | date:"dd/MM/yyyy"}}</td> 
+                    <td>{{obj.os_data_fechamento | date:"dd/MM/yyyy"}}</td> 
+                    <td>{{obj.os_descricao}}</td>  
+                    <td>{{obj.pessoaCli.nome}}</td> 
+                    <td>{{obj.pessoaFun.nome}}</td> 
+                    <td>{{obj.tipoServico.descricao}}</td> 
+                    <td>{{obj.os_local}}</td>
+                    <td>{{obj.laboratorioSala.nome}}</td> 
+                   
+                </tr>  
+            </ng-template>
+        </p-table>
+    </p-panel>
+
+
+    <p-dialog header="Ordem de Servico" [responsive]="true" [style]="{width: '800px'}" [(visible)]="displaySaveDialog"
+    [modal]="true">
+        <div class="ui-g ui-fluid">
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Descrição:
+                </div>
+                <div class="ui-grid-col-8">
+                    <input pInputText id="descricao" [(ngModel)]="obj.os_descricao" placeholder="Descrição do serviço" />
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Local:
+                </div>
+                <div class="ui-grid-col-8">
+                    <input pInputText id="local" [(ngModel)]="obj.os_local" placeholder="Local do serviço"/>
+                </div>
+            </div>
+
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Status:
+                </div>
+                <div class="ui-grid-col-6">
+                    <p-dropdown [options]="status" [(ngModel)]="obj.os_status" ></p-dropdown>
+            
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Cliente:
+                </div>
+                <div class="ui-g-6">
+                    
+                    <select class="form-control" name="inputCli" id="inputCli"  on-change="atribuirCliente(a.value)" #a>
+                        <ng-container *ngFor="let objClienteSel of listaCli">
+
+                            <option *ngIf="objClienteSel.pes_perfil === 'cliente'" value="{{objClienteSel.id}}" [selected]= "objClienteSel.id === obj.pessoaCli.id" >{{objClienteSel.nome}}</option>
+
+                        </ng-container>
+                       
+                    </select>
+                    
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Funcionario:
+                </div>
+                <div class="ui-g-6">
+                    
+                    <select class="form-control" name="inputFun" id="inputFun" on-change="atribuirFuncionario(b.value)" #b>
+                        <ng-container *ngFor="let objFuncionarioSel of listaFun">  
+                        <option *ngIf="objFuncionarioSel.pes_perfil ==='funcionario' || objFuncionarioSel.pes_perfil ==='administrador' "  value="{{objFuncionarioSel.id}}" [selected]= "objFuncionarioSel.id === obj.pessoaFun.id">{{objFuncionarioSel.nome}}</option>
+                    
+                    </ng-container>
+                    </select>
+                    
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Tipo de Serviço:
+                </div>
+                <div class="ui-g-6">
+                    
+                    <select class="form-control" name="inputTipo" id="inputTipo" on-change="atribuirTipoServico(c.value)" #c>
+                        <option *ngFor="let objServicoSel of listaServico" value="{{objServicoSel.id}}" [selected]= "objServicoSel.id === obj.tipoServico.id">{{objServicoSel.descricao}}</option>
+                    </select>
+                    
+                </div>
+            </div>
+            
+ 
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Laboratorio:
+                </div>
+                <div class="ui-g-6">
+                    
+                    <select class="form-control" name="inputLab" id="inputLab" on-change="atribuirLaboratorio(d.value)" #d>
+                        <option *ngFor="let objLaboratorioSel of listaLaboratorio" value="{{objLaboratorioSel.id}}" [selected]= "objLaboratorioSel.id === obj.laboratorioSala.id">{{objLaboratorioSel.nome}}</option>
+                    </select>
+                    
+                </div>
+            </div>
+
+        
+        </div>
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="pi pi-times" (click)="excluir()" label="excluir"class="ui-button-danger"></button>
+                <button type="button" pButton icon="pi pi-check" (click)="alterar()" label="Editar" class="ui-button-warning"></button>
+                <button type="button" pButton icon="pi pi-check" (click)="adicionar()" label="Adicionar" class="ui-button-success"></button>
+            </div>
+        </p-footer>
+    </p-dialog>
+
+
+    
+    <p-dialog header="Historico" [responsive]="true" [style]="{width: '800px'}" [(visible)]="display"
+    [modal]="true">
+    
+    <div class="card">
+        <div class="card-body">
+    
+    <p-table [value]="listaHistorico">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Processo</th>
+                <th>Status</th>
+                <th>Data</th>
+
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-objHistorico>
+            <tr>
+                <td>{{objHistorico.ordemServico.os_id}}</td>
+                <td>{{objHistorico.hist_status}}</td>
+                <td>{{objHistorico.hist_data | date:"dd/MM/yyyy"}}</td> 
+                
+            </tr>
+        </ng-template>
+    </p-table>
+    
+        </div>
+    </div>
+    </p-dialog>
+
+
+</div>
