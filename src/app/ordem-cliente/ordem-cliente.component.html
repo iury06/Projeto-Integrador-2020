@@ -1,0 +1,139 @@
+<br>
+<div class="ui-g">
+    <p-toast></p-toast>
+    <p-confirmDialog header="Confirmação" acceptLabel="Sim" rejectLabel="Não" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+    <p-panel header="Minhas Solicitações" [style]="{width: '80%', margin: '0 auto'}">
+        <div style="margin-bottom: 20px">
+            <p-menubar [model]="items"></p-menubar>
+        </div>
+
+        <p-table [value]="lista" [columns]="cols" [responsive]="true" selectionMode="single" [(selection)]="ordemSelecionada"
+            dataKey="id" [paginator]="true" [rows]="15">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                        {{col.header}}
+    
+                
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                
+            </th>
+    
+                <th>Solicitado </th>
+                <th>Solicitante</th>
+                <th>Descrição</th>
+                <th>Serviço</th>
+                <th>Local</th>
+                
+                    </tr>
+    
+                </ng-template>
+                <ng-template pTemplate="body" let-obj let-columns="columns">
+                    
+                    <tr [pSelectableRow]="obj">
+    
+                        <td *ngFor="let col of columns">
+                            {{obj[col.field]}}
+                        
+                        </td>
+                    
+                        <td>{{obj.os_data_emisao | date:"dd/MM/yyyy"}}</td> 
+                        <td>{{obj.pessoaCli.nome}}</td> 
+                        <td>{{obj.os_descricao}}</td> 
+                        <td>{{obj.tipoServico.descricao}}</td> 
+                        <td>{{obj.laboratorioSala.nome}}</td> 
+                       
+                    </tr>  
+                </ng-template>
+            </p-table>
+        </p-panel>
+    
+    <p-dialog header="Solicitar Serviço" [responsive]="true" [style]="{width: '800px'}" [(visible)]="displaySaveDialog"
+        [modal]="true">
+
+        <div class="ui-g ui-fluid">
+
+        
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Descrição:
+                </div>
+                <div class="ui-grid-col-8">
+                    <textarea [rows]="5" [cols]="5" pInputTextarea autoResize="autoResize"  [(ngModel)]="obj.os_descricao"></textarea>
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Local:
+                </div>
+                <div class="ui-grid-col-8">
+                    <input pInputText id="local" [(ngModel)]="obj.os_local" />
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Tipo serviço:
+                </div>
+                <div class="ui-grid-col-5">
+                    <select class="form-control" name="inputTipo" id="inputTipo" on-change="atribuirTipoServico(c.value)" #c>
+                        <option *ngFor="let objServicoSel of listaServico" value="{{objServicoSel.id}}" [selected]= "objServicoSel.id === obj.tipoServico.id">{{objServicoSel.descricao}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Laboratorio:
+                </div>
+                <div class="ui-grid-col-5">
+                    <select class="form-control" name="inputLab" id="inputLab" on-change="atribuirLaboratorio(d.value)" #d>
+                        <option *ngFor="let objLaboratorioSel of listaLaboratorio" value="{{objLaboratorioSel.id}}" [selected]= "objLaboratorioSel.id === obj.laboratorioSala.id">{{objLaboratorioSel.nome}}</option>
+                    </select>
+                </div>
+            </div>
+
+            
+        </div>
+
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                
+                <button type="button" pButton icon="pi pi-check" (click)="adicionar()" label="Solicitar" class="ui-button-success"></button>
+            </div>
+        </p-footer>
+    </p-dialog>
+
+    <p-dialog header="Historico de Solicitações" [responsive]="true" [style]="{width: '900px'}" [(visible)]="display"
+    [modal]="true">
+    
+    <div class="card">
+        <div class="card-body">
+    
+    <p-table [value]="listaHistorico">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Numero do pedido</th>
+                <th>Data</th>
+                <th>Situação</th>
+                
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-objHistorico>
+            <tr>
+                <td>{{objHistorico.ordemServico.os_id}}</td>
+                <td>{{objHistorico.hist_data | date:"dd/MM/yyyy"}}</td> 
+                <td>{{objHistorico.hist_status}}</td>
+                
+                
+            </tr>
+        </ng-template>
+    </p-table>
+    
+        </div>
+    </div>
+    </p-dialog>
+
+</div>

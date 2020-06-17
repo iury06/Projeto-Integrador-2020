@@ -1,0 +1,33 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div id ="img">
+<div class="wrapper fadeInDown">
+
+  <br><br>
+  <br><br> 
+  <br>
+  <div id="formContent">
+  
+    <div id="formFooterLogin">
+      <a>Login</a>
+    </div>
+    <br>
+    <!-- Login Form -->
+    <form>
+      <input type="text" id="login" class="fadeIn second" name="login" placeholder="Usuario" [(ngModel)]="objUser.login">
+      <input type="password" id="password" class="fadeIn third" name="login" placeholder="Senha" [(ngModel)]="objUser.senha">
+      <br>
+      <input type="submit" class="fadeIn fourth" value="Entrar" (click)="fazerLogin()">
+    </form>
+
+    
+    <div id="formFooter">
+      <a routerLink="/cadastro">Registrar?</a>
+    </div>
+
+  </div>
+</div>
+</div>
