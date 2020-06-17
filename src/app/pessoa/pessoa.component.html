@@ -1,0 +1,140 @@
+<app-home></app-home>
+<div class="ui-g">
+    <p-toast></p-toast>
+    <p-confirmDialog header="Confirmação" acceptLabel="Sim" rejectLabel="Não" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+    <p-panel header="Pessoa" [style]="{width: '90%', margin: '0 auto'}">
+        <div style="margin-bottom: 20px">
+            <p-menubar [model]="items"></p-menubar>
+        </div>
+
+        <p-table [value]="lista" [columns]="cols" [responsive]="true" selectionMode="single" [(selection)]="pessoaSelecionada"
+        #dt [globalFilterFields]="['id','nome','pes_perfil', 'pes_telefone', 'pes_email', 'pes_funcao']"
+        [(selection)]="historicoSelecionado"
+            dataKey="id" [paginator]="true" [rows]="15">
+
+            <ng-template pTemplate="caption">
+                <div style="text-align: right">
+                    <input type="text" pInputText size="50" placeholder="Pesquisar..."
+                        (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                        {{col.header}}
+
+                        
+                        
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+                
+            </th>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-obj let-columns="columns">
+                <tr [pSelectableRow]="obj">
+
+                    <td *ngFor="let col of columns">
+                        {{obj[col.field]}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-panel>
+
+    
+    <p-dialog header="Pessoa" [responsive]="true" [style]="{width: '700px'}" [(visible)]="displaySaveDialog"
+        [modal]="true">
+        <div class="ui-g ui-fluid">
+          
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Nome:
+                </div>
+                <div class="ui-grid-col-8">
+                    <input pInputText id="nome" [(ngModel)]="obj.nome"  type="text" class="validate" placeholder="Nome completp"/>
+                </div>
+            </div>
+           
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    CPF/CNPJ:
+                </div>
+                <div class="ui-grid-col-5">
+                    <p-inputMask id="telefone" mask="444.444.444-44" [(ngModel)]="obj.pes_cpf_cnpj" placeholder="Digite o CPF" ></p-inputMask>
+            
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Telefone:
+                </div>
+                <div class="ui-grid-col-5">
+                    <p-inputMask id="telefone" mask="(99) 99999-9999" [(ngModel)]="obj.pes_telefone" placeholder="(99) 99999-9999" ></p-inputMask>
+                    
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Email:
+                </div>
+                <div class="ui-grid-col-6">
+                    <input pInputText id="email" [(ngModel)]="obj.pes_email" placeholder="nameuser@email.com" />
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Função:
+                </div>
+                <div class="ui-grid-col-5">
+                    <input pInputText id="funcao" [(ngModel)]="obj.pes_funcao" />
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Login:
+                </div>
+                <div class="ui-grid-col-5">
+                    <input pInputText id="login" [(ngModel)]="obj.pes_login" placeholder="usuario" />
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Senha:
+                </div>
+                <div class="ui-grid-col-5">
+                    <input pInputText id="senha" [(ngModel)]="obj.pes_senha" type="password" placeholder="Senha" />
+                </div>
+            </div>
+
+             <div class="ui-g-12">
+                <div class="ui-grid-col-2">
+                    Perfil:
+                </div>
+                <div class="ui-grid-col-5">
+                    <p-dropdown [options]="itemPerfil" [(ngModel)]="obj.pes_perfil" ></p-dropdown>
+                </div>
+            </div>
+
+
+        </div>
+
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="pi pi-times" (click)="excluir()" label="excluir"class="ui-button-danger"></button>
+                <button type="button" pButton icon="pi pi-check" (click)="alterar()" label="Editar" class="ui-button-warning"></button>
+                <button type="button" pButton icon="pi pi-check" (click)="adicionar()" label="Adicionar" class="ui-button-success"></button>
+            </div>
+        </p-footer>
+
+
+        
+    </p-dialog>
+</div>

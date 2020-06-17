@@ -1,0 +1,77 @@
+<div class="ui-g">
+    <p-toast></p-toast>
+<p-dialog header="Cadastro de usuario" [responsive]="true" [style]="{width: '800px'}" [(visible)]="displaySaveDialog"
+        [modal]="true">
+        <div class="ui-g ui-fluid">
+          
+            <div class="ui-g-12">
+                <div class="ui-g-1">
+                    <label for="nome">Nome</label>
+                </div>
+                <div class="ui-g-7">
+                    
+                    <input pInputText id="nome" [(ngModel)]="obj.nome"  type="text" class="validate"pInputText required />
+                </div>
+            </div>
+           
+
+            <div class="ui-g-12">
+                <div class="ui-g-1">
+                    <label for="cpf">CPF</label>
+                </div>
+                <div class="ui-g-4">
+                    <p-inputMask id="cpf" mask = "999.999.999-99" [(ngModel)]="obj.pes_cpf_cnpj" placeholder="999.999.999-99" ></p-inputMask>
+                     
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-1">
+                    <label for="telefone">Telefone</label>
+                </div>
+                <div class="ui-g-3">
+                    <p-inputMask id="telefone" mask="(99) 99999-9999" [(ngModel)]="obj.pes_telefone" placeholder="(99) 99999-9999" ></p-inputMask>
+                    
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-1">
+                    <label for="email">Email</label>
+                </div>
+                <div class="ui-g-6">
+                    
+                    <input pInputText id="email" [(ngModel)]="obj.pes_email"placeholder="nameuser@email.com" />
+                </div>
+            </div>
+
+
+            <div class="ui-g-12">
+                <div class="ui-g-1">
+                    <label for="login">Login</label>
+                </div>
+                <div class="ui-g-4">
+                    <input pInputText id="login" [(ngModel)]="obj.pes_login" />
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-1">
+                    <label for="senha">Senha</label>
+                </div>
+                <div class="ui-g-4">
+                    <input pInputText id="senha" [(ngModel)]="obj.pes_senha" type="password"/>
+                </div>
+            </div>
+
+        </div>
+
+        <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="pi pi-times" (click)="cancelar()" label="Cancelar"  class="ui-button-danger"></button>
+                <button type="button" pButton icon="pi pi-check" (click)="adicionar()" label="Registar"  class="ui-button-success"></button>
+               
+            </div>
+        </p-footer>
+</p-dialog>
+</div>
