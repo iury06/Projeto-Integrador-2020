@@ -9,7 +9,6 @@
 
         <p-table [value]="lista" [columns]="cols" [responsive]="true" selectionMode="single" [(selection)]="pessoaSelecionada"
         #dt [globalFilterFields]="['id','nome','pes_perfil', 'pes_telefone', 'pes_email', 'pes_funcao']"
-        [(selection)]="historicoSelecionado"
             dataKey="id" [paginator]="true" [rows]="15">
 
             <ng-template pTemplate="caption">
@@ -53,7 +52,7 @@
                     Nome:
                 </div>
                 <div class="ui-grid-col-8">
-                    <input pInputText id="nome" [(ngModel)]="obj.nome"  type="text" class="validate" placeholder="Nome completp"/>
+                    <input pInputText id="nome" [(ngModel)]="obj.nome"  type="text" class="validate" placeholder="Nome completo"/>
                 </div>
             </div>
            
