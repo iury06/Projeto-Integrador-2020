@@ -1,0 +1,148 @@
+
+--===========================================================================================
+--> BANCO DE DADOS PROJETO INTEGRADOR ADS-5 2020
+
+--> Aníbal Júnior, Fábio Garcia, Iuri Alves e Izaías Cintra.
+--===========================================================================================
+
+
+--===========================================================================================
+--> CRIAÇÃO DE TABELAS
+-------------------------------------------------------------------------
+create table tipo_servico(
+tps_id 	serial 	  not null 	primary key,
+tps_descricao 	  varchar(60)
+
+);
+-------------------------------------------------------------------------
+create table laboratorio_sala(
+lab_id 	   serial    not null primary key,
+lab_nome   varchar(40)
+);
+-------------------------------------------------------------------------
+create table pessoa(
+pes_id	        serial 	      not null 	primary key,
+pes_nome 	varchar(60),
+pes_cpf_cnpj 	varchar(18),
+pes_telefone 	varchar(20),
+pes_email 	varchar(60),
+pes_funcao	varchar(40),
+pes_login	varchar(40),
+pes_senha 	varchar(128),
+pes_perfil 	varchar(60)
+);
+-------------------------------------------------------------------------
+create table ordem_servico(
+os_id 	   serial	        not null 	primary key,
+os_tps_id	    	 	 integer	not null,
+os_lab_id 	    	 	 integer	not null,
+os_pes_id_fun  	 	 integer 	not null,
+os_pes_id_cli 	 	 integer 	not null,
+os_data_emisao	  	 date,
+os_data_fechamento 	 date,
+os_status		 varchar(60),
+os_descricao 		 varchar(60),
+os_local 		 varchar(40),
+
+constraint rel_tipoServico_ordemServico foreign key  (os_tps_id) references tipo_servico(tps_id),
+
+constraint rel_labSala_ordemServico foreign key (os_lab_id) references laboratorio_sala(lab_id),
+
+constraint rel_funcionario_ordemServico foreign key (os_pes_id_fun) references pessoa (pes_id),
+
+constraint rel_cliente_ordemServico foreign key (os_pes_id_cli) references pessoa(pes_id)
+);
+-------------------------------------------------------------------------
+create table historico(
+hist_id 	 serial	        not null     primary key,
+hist_os_id	 integer		not null,
+hist_pes_id 	 integer		not null,
+hist_data date,
+hist_status	 		varchar(60),
+
+constraint rel_ordemservico_historico foreign key (hist_os_id) references ordem_servico(os_id),
+
+constraint rel_funcionario_historico foreign key (hist_pes_id) references pessoa(pes_id)
+
+);
+
+--===========================================================================================
+--> TESTES --> INSERÇÃO DIRETAMENTE NO BANCO PARA TESTES DE SERVIDOR BACK-END (STS), nessa sequência pois têm as constrainst
+-------------------------------------------------------------------------
+
+insert into laboratorio_sala (lab_nome) values ('Laboratório 1')
+
+insert into tipo_servico (tps_descricao ) values ('Exame de sangue')
+
+insert into pessoa (pes_id, pes_nome , pes_cpf_cnpj , pes_telefone , pes_email , pes_funcao	, pes_login	, pes_senha , pes_perfil ) 
+			values (1 , 'Fábio' , '123456789-10' , '62-99999-9999' , 'fabiogarcia@hotmail.com' , 'qualquerum' , 	'Fab' , '123456' , 'cliente' )
+			
+insert into pessoa (pes_id, pes_nome , pes_cpf_cnpj , pes_telefone , pes_email , pes_funcao	, pes_login	, pes_senha , pes_perfil ) 
+			values (2 , 'Júnior' , '123456789-10' , '62-99999-9999' , 'anibalsidneyjr@hotmail.com' , 'qualquerum - 2' , 	'Jr' , '123456' , 'funcionario' )
+
+insert into ordem_servico (os_tps_id, os_lab_id ,os_pes_id_fun , os_pes_id_cli , os_data_emisao	, os_data_fechamento , os_status , os_descricao , os_local ) 
+				  values (1 , 1 , 1 , 2 , '22/05/2020' , '24/05/2020' , 'status OK' , 'Descrição OK' , 'Goiânia')
+				  
+insert into historico (hist_os_id , hist_pes_id , hist_data , hist_status ) values (1, 2 , '2020/05/23' , 'Ativo')
+
+--===========================================================================================
+
+--===========================================================================================
+--> SELEÇÃO DE TABELAS
+-------------------------------------------------------------------------
+select * from historico
+select * from laboratorio_sala
+select * from ordem_servico
+select * from pessoa
+select * from tipo_servico
+
+--===========================================================================================
+--> DELETANDO tabelas nessa sequência pois têm as constrainst
+-------------------------------------------------------------------------
+drop table historico
+drop table ordem_servico
+drop table tipo_servico
+drop table pessoa
+drop table laboratorio_sala
+
+--===========================================================================================
+--> TESTES NO POSTMAN
+-------------------------------------------------------------------------
+
+--> Carregando(GET) no POSTMAN , tanto faz a sequência.
+historico --> get OK
+ordem_servico --> get OK
+laboratorio_sala -->  get OK
+tipo_servico --> get OK
+pessoa --> get OK
+
+-------------------------------------------------------------------------
+
+--> Deletando(DELETE) no POSTMAN nessa sequência pois têm as constrainst
+historico --> delete OK
+ordem_servico --> delete OK
+laboratorio_sala -->  delete OK
+tipo_servico --> delete OK
+pessoa --> delete OK
+
+-------------------------------------------------------------------------
+
+--> Inserindo(POST) no POSTMAN nessa sequência pois têm as constrainst
+laboratorio_sala -->  post OK
+pessoa --> post OK
+tipo_servico --> post OK
+ordem_servico --> post OK
+historico --> post OK
+
+-------------------------------------------------------------------------
+
+--> Alterando(PUT) no POSTMAN , tanto faz a sequência
+historico --> put OK
+ordem_servico --> put OK
+laboratorio_sala -->  put OK
+tipo_servico --> put OK
+pessoa --> put OK
+
+-------------------------------------------------------------------------
+
+
